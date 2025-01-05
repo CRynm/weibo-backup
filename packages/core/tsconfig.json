@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@shared": ["../shared/src/index.ts"]
+    }
+  },
+  "exclude": [
+    "../ui/**/*",
+    "../../apps/web/**/*"
+  ]
+}

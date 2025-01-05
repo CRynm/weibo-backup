@@ -1,0 +1,19 @@
+{
+  "name": "@weibo-archiver/ui",
+  "type": "module",
+  "private": true,
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "src/index.ts",
+  "dependencies": {
+    "@weibo-archiver/core": "workspace:^",
+    "sass": "^1.80.4"
+  },
+  "devDependencies": {
+    "@iconify-json/tabler": "^1.2.6",
+    "naive-ui": "^2.40.1",
+    "unocss": "^0.63.6"
+  }
+}

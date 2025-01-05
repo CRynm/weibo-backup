@@ -1,0 +1,43 @@
+{
+  "name": "weibo-archiver",
+  "type": "module",
+  "version": "0.4.4",
+  "description": "Weibo archiver CLI tool",
+  "author": {
+    "name": "Chilfish",
+    "email": "chil4fish@gmail.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Chilfish/Weibo-archiver",
+  "bugs": {
+    "url": "https://github.com/Chilfish/Weibo-archiver/issues"
+  },
+  "module": "./dist/weibo-archiver.mjs",
+  "bin": {
+    "weibo-archiver": "./dist/weibo-archiver.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsx build.ts",
+    "dev": "unbuild --stub",
+    "lint": "eslint .",
+    "start": "node weibo-archiver.mjs"
+  },
+  "peerDependencies": {
+    "axios": "^1.6.8",
+    "p-queue": "^8.0.1"
+  },
+  "dependencies": {
+    "c12": "^2.0.1",
+    "citty": "^0.1.6",
+    "consola": "^3.2.3"
+  },
+  "devDependencies": {
+    "@weibo-archiver/shared": "workspace:^"
+  }
+}

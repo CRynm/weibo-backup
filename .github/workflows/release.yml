@@ -1,0 +1,81 @@
+name: Release apps
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  install-and-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Install Deps
+        run: pnpm install
+
+      - name: build and zip
+        run: pnpm release
+
+      - name: upload monkey
+        uses: actions/upload-artifact@v4
+        with:
+          name: weibo-archiver.user.js
+          path: dist/weibo-archiver.user.js
+
+      - name: upload web
+        uses: actions/upload-artifact@v4
+        with:
+          name: weibo-archiver-webapp
+          path: dist/weibo-archiver-webapp.zip
+
+      - name: upload scripts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weibo-archiver-scripts
+          path: dist/weibo-archiver-scripts.zip
+
+      - name: upload cli
+        uses: actions/upload-artifact@v4
+        with:
+          name: weibo-archiver-cli
+          path: dist/weibo-archiver-cli.zip
+
+  darft-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: install-and-build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: weibo-archiver-release
+          merge-multiple: true
+      - run: ls -R weibo-archiver-release
+
+      - uses: ncipollo/release-action@v1
+        with:
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
+          omitPrereleaseDuringUpdate: true
+          allowUpdates: true
+          artifacts: weibo-archiver-release/*
+          draft: true
+          bodyFile: .github/release.md
+          token: ${{ secrets.GITHUB_TOKEN }}

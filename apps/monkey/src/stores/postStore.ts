@@ -112,8 +112,30 @@ export const usePostStore = defineStore('post', () => {
     const res = await exportData(startTimestamp, endTimestamp, posts, userInfo.value, followings)
     if (!res)
       return
-    const scripts = 'https://github.com/Chilfish/Weibo-archiver/raw/monkey/scripts.zip'
-    saveAs(scripts, 'weibo-archiver-scripts.zip')
+
+    // 方法资料：https://stackoverflow.com/questions/77999089/github-rest-api-cors-error-when-trying-to-download-public-repository-git-archive
+    const scripts = 'https://corsproxy.io/?url=https://github.com/user-attachments/files/18320820/scripts.zip'
+    // saveAs(scripts, `weibo-archiver-scripts-${dateRange}.zip`)
+    await downloadScripts(scripts, config.value.name)
+  }
+
+  async function downloadScripts(scriptsURL: string, username: string) {
+    try {
+      // 使用 fetch 获取文件
+      const response = await fetch(scriptsURL)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      // 获取文件的二进制数据
+      const blob = await response.blob()
+
+      // 使用 file-saver 保存文件
+      saveAs(blob, `weibo-archiver-scripts-${username}.zip`)
+    }
+    catch (error) {
+      console.error('下载文件失败:', error)
+    }
   }
 
   return {

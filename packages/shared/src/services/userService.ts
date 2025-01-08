@@ -58,15 +58,25 @@ export async function getFollowings(
   uid: string,
   page: number,
 ) {
-  const { users, total_number } = await weiFetch<{
+  const { users, total_number, ok, msg } = await weiFetch<{
     users: any[]
     total_number: number
+    ok: number
+    msg: string
   }>('/friendships/friends', {
     params: {
       uid,
       page,
     },
   })
+
+  if (ok === 0) { // 无法查看关注列表的情况
+    console.error('>>>>>>>>>>>>>>>>>>>> ', msg)
+    return {
+      users: [], // 返回空数组
+      total: 0, // 总数设为 0
+    }
+  }
 
   return {
     users: users.map(parseFollowing),
